@@ -1,0 +1,63 @@
+[
+  {
+    "ParameterKey": "VpcBlock",
+    "ParameterValue": "192.168.0.0/16"
+  }, 
+  {
+    "ParameterKey": "Subnet01Block",
+    "ParameterValue": "192.168.0.0/24"
+  },
+  {
+    "ParameterKey": "Subnet02Block",
+    "ParameterValue": "192.168.1.0/24"
+  },
+  {
+    "ParameterKey": "Subnet03Block",
+    "ParameterValue": "192.168.2.0/24"
+  },
+  {
+    "ParameterKey": "Subnet04Block",
+    "ParameterValue": "192.168.3.0/24"
+  },
+  {
+    "ParameterKey": "ClusterName",
+    "ParameterValue": "eks"
+  },
+  {
+    "ParameterKey": "NodeGroupName",
+    "ParameterValue": "node"
+  },
+  {
+    "ParameterKey": "NodeAutoScalingGroupMinSize",
+    "ParameterValue": "1"
+  },
+  {
+    "ParameterKey": "NodeAutoScalingGroupDesiredCapacity",
+    "ParameterValue": "2"
+  },
+  {
+    "ParameterKey": "NodeAutoScalingGroupMaxSize",
+    "ParameterValue": "5"
+  },
+  {
+    "ParameterKey": "NodeInstanceType",
+    "ParameterValue": "t2.small"
+  },
+  {
+    "ParameterKey": "NodeImageId",
+    "ParameterValue": "ami-02c1de421df89c58d"
+  },
+  {
+    "ParameterKey": "NodeVolumeSize",
+    "ParameterValue": "15"
+  },
+  {
+    "ParameterKey": "KeyName",
+    "ParameterValue": "anand"
+  },
+  {
+    "ParameterKey": "ClusterVersion",
+    "ParameterValue": "1.11"
+  }
+
+]

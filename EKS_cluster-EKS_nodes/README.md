@@ -3,6 +3,7 @@ This will create
 - EKS Cluster
 - EKS Nodes
 
-And Uses the Existing VPC and Subnets
+
+And Uses the Existing VPC and Subnets (private or public)
 
 
