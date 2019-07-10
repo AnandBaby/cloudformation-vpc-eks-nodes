@@ -272,7 +272,7 @@ Resources:
     Type: AWS::EC2::EIP
     Properties:
       Domain: VPC
-      
+
   Subnet01:
     Type: AWS::EC2::Subnet
     Metadata:
@@ -567,6 +567,53 @@ Resources:
     - EKSCluster
 
 
+  NodeScaleUpPolicy:
+    Type: 'AWS::AutoScaling::ScalingPolicy'
+    Properties:
+      AdjustmentType: ChangeInCapacity
+      AutoScalingGroupName: !Ref NodeGroup
+      Cooldown: '60'
+      ScalingAdjustment: '1'
+  NodeScaleDownPolicy:
+    Type: 'AWS::AutoScaling::ScalingPolicy'
+    Properties:
+      AdjustmentType: ChangeInCapacity
+      AutoScalingGroupName: !Ref NodeGroup
+      Cooldown: '60'
+      ScalingAdjustment: '-1'
+  CPUAlarmHigh:
+    Type: 'AWS::CloudWatch::Alarm'
+    Properties:
+      AlarmDescription: Scale-up if CPU > 80% for 10 minutes
+      MetricName: CPUUtilization
+      Namespace: AWS/EC2
+      Statistic: Average
+      Period: '300'
+      EvaluationPeriods: '2'
+      Threshold: '80'
+      AlarmActions:
+        - !Ref NodeScaleUpPolicy
+      Dimensions:
+        - Name: AutoScalingGroupName
+          Value: !Ref NodeGroup
+      ComparisonOperator: GreaterThanThreshold
+  CPUAlarmLow:
+    Type: 'AWS::CloudWatch::Alarm'
+    Properties:
+      AlarmDescription: Scale-down if CPU < 60% for 10 minutes
+      MetricName: CPUUtilization
+      Namespace: AWS/EC2
+      Statistic: Average
+      Period: '300'
+      EvaluationPeriods: '2'
+      Threshold: '60'
+      AlarmActions:
+        - !Ref NodeScaleDownPolicy
+      Dimensions:
+        - Name: AutoScalingGroupName
+          Value: !Ref NodeGroup
+      ComparisonOperator: LessThanThreshold
+
 Outputs:
 
   SubnetIds:
@@ -581,6 +628,8 @@ Outputs:
     Description: The VPC Id
     Value: !Ref VPC
 
+  ClusterName:
+    Value: !Ref ClusterName
   Endpoint:
     Value: !GetAtt EKSCluster.Endpoint
   ClusterArn:
