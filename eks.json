@@ -34,11 +34,12 @@
         "ClusterVersion": {
             "Description": "Cluster Version",
             "Type": "String",
-            "Default": "1.11",
+            "Default": "1.13",
             "AllowedValues": [
                 "1.10",
                 "1.11",
-                "1.12"
+                "1.12",
+                "1.13"
             ]
         },
         "KeyName": {
@@ -48,7 +49,7 @@
         "NodeImageId": {
             "Description": "AMI id for the node instances (Amazon Region & EKS version dependent).For the Amazon EKS-Optimized AMI, refer https://docs.aws.amazon.com/eks/latest/userguide/eks-optimized-ami.html",
             "Type": "AWS::EC2::Image::Id",
-            "Default": "ami-02c1de421df89c58d"
+            "Default": "ami-0f2e8e5663e16b436"
         },
         "NodeInstanceType": {
             "Description": "EC2 instance type for the node instances",
@@ -318,6 +319,11 @@
             }
         },
         "NatGateway": {
+            "DependsOn": [
+                "ElasticIPAddress",
+                "Subnet01",
+                "VPCGatewayAttachment"
+            ],
             "Type": "AWS::EC2::NatGateway",
             "Properties": {
                 "AllocationId": {
@@ -340,7 +346,10 @@
             }
         },
         "ElasticIPAddress": {
-            "DependsOn": "InternetGateway",
+            "DependsOn": [
+                "VPCGatewayAttachment",
+                "InternetGateway"
+            ],
             "Type": "AWS::EC2::EIP",
             "Properties": {
                 "Domain": "VPC"
@@ -418,7 +427,7 @@
             "Properties": {
                 "AvailabilityZone": {
                     "Fn::Select": [
-                        "2",
+                        "0",
                         {
                             "Fn::GetAZs": {
                                 "Ref": "AWS::Region"
@@ -450,7 +459,7 @@
             "Properties": {
                 "AvailabilityZone": {
                     "Fn::Select": [
-                        "3",
+                        "1",
                         {
                             "Fn::GetAZs": {
                                 "Ref": "AWS::Region"
@@ -492,7 +501,7 @@
                     "Ref": "Subnet02"
                 },
                 "RouteTableId": {
-                    "Ref": "RouteTablePrivate"
+                    "Ref": "RouteTablePublic"
                 }
             }
         },
@@ -503,7 +512,7 @@
                     "Ref": "Subnet03"
                 },
                 "RouteTableId": {
-                    "Ref": "RouteTablePublic"
+                    "Ref": "RouteTablePrivate"
                 }
             }
         },
@@ -531,6 +540,12 @@
                         "FromPort": 443,
                         "ToPort": 443,
                         "CidrIp": "0.0.0.0/0"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": 80,
+                        "ToPort": 80,
+                        "CidrIp": "0.0.0.0/0"
                     }
                 ],
                 "SecurityGroupEgress": [
@@ -544,6 +559,9 @@
             }
         },
         "EKSCluster": {
+            "DependsOn": [
+                "VPC"
+            ],
             "Type": "AWS::EKS::Cluster",
             "Properties": {
                 "Name": {
@@ -566,7 +584,7 @@
                             "Ref": "Subnet01"
                         },
                         {
-                            "Ref": "Subnet03"
+                            "Ref": "Subnet02"
                         }
                     ]
                 },
@@ -771,7 +789,7 @@
                 },
                 "VPCZoneIdentifier": [
                     {
-                        "Ref": "Subnet02"
+                        "Ref": "Subnet03"
                     },
                     {
                         "Ref": "Subnet04"
@@ -1007,3 +1025,4 @@
         }
     }
 }
+
