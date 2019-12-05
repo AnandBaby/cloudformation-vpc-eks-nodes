@@ -20,8 +20,8 @@ EKS Creation via CLI using Cloudformation & parameter file
 
 - IAM authenticator should be instlled configured from (https://docs.aws.amazon.com/eks/latest/userguide/install-aws-iam-authenticator.html)
 or You can use the shell script to congiure this
-	- linux (wget )
-	- mac ( wget )
+	- linux (wget https://raw.githubusercontent.com/AnandBaby/cloudformation-vpc-eks-nodes/master/aws-iam-authenticator-kubeConfig-linux.sh)
+	- mac ( wget https://raw.githubusercontent.com/AnandBaby/cloudformation-vpc-eks-nodes/master/aws-iam-authenticator-kubeConfig-mac.sh )
 
 - AWS EC2 KeyPair ( which is used for ssh into nodes when required)
 
@@ -45,7 +45,7 @@ or You can use the shell script to congiure this
 
 # Connecting nodes with eks cluster
 
-- use this shell script and run it locally (wget )
+- use this shell script and run it locally (wget https://raw.githubusercontent.com/AnandBaby/cloudformation-vpc-eks-nodes/master/aws-auth.sh )
 
 
 - Now ececute "kubect get nodes" you can see the nodes
